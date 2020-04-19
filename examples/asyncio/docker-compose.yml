@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  sub:
+    image: pyzmq-dev
+    build:
+        context: ../..
+        dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/pyzmq/examples/asyncio
+    working_dir: /usr/src/pyzmq/examples/asyncio
+    command: ["python", "sub.py", "--host", "*"]
+  dealer:
+    image: pyzmq-dev
+    build:
+        context: ../..
+        dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/pyzmq/examples/asyncio
+    working_dir: /usr/src/pyzmq/examples/asyncio
+    command: ["python", "dealer.py", "--host", "pubrouter"]
+  pubrouter:
+    image: pyzmq-dev
+    build:
+        context: ../..
+        dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/pyzmq/examples/asyncio
+    working_dir: /usr/src/pyzmq/examples/asyncio
+    command: ["python", "pubrouter.py", "--sub-host", "sub", "--router-host", "*"]
